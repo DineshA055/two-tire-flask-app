@@ -19,7 +19,7 @@ def hello():
     cur.execute('SELECT message FROM messages')
     messages = cur.fetchall()
     cur.close()
-    return render_two-tire-flask-app('index.html', messages=messages)
+    return render_template('index.html', messages=messages)
 
 @app.route('/submit', methods=['POST'])
 def submit():
