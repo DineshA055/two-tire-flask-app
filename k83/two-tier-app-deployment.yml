@@ -1,0 +1,17 @@
+apiVersion: apps/v1              #apiversion 
+kind: Deployment                   #Am creating deployment
+metadata:
+   name: two-tier-app-deployment    #deployment name
+   labels:
+     app: two-tier-app
+
+spec: 
+  replica: 4                            # I have to create 4 pods
+  selector:                             #Use selector to match lables (which one we need to anything avaiable with two-tier-app) need to select and match
+    matchLabels:
+      app: two-tier-app
+
+  template:                           #In deployment we required to create a pod will give info in template
+    metadata:
+     lables:
+       app: two-tier-app
