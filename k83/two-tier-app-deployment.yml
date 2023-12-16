@@ -18,7 +18,7 @@ spec:
     spec:
        containers:                 #we required multiple containers
          -name: two-tier-app-pod                    #Container name
-         -image: dinesh0444/flaskapp:latest        #image pull from Docker hub
+         -image: dinesh444/flaskapp:latest        #image pull from Docker hub
        env:                                   #Environmental variable we have to use -> check in code app.py we have given environment 
           -name: MYSQL_HOST                  #mysql host environment varaiable
            value: "mysql"                    #has of now we are given mysql but after creating pod for mysql we need to provide the IP here
