@@ -13,5 +13,23 @@ spec:
 
   template:                           #In deployment we required to create a pod will give info in template
     metadata:
-     lables:
-       app: two-tier-app
+       lables:
+         app: two-tier-app
+    spec:
+       containers:                 #we required multiple containers
+         -name: two-tier-app-pod                    #Container name
+         -image: dinesh0444/flaskapp:latest        #image pull from Docker hub
+       env:                                   #Environmental variable we have to use -> check in code app.py we have given environment 
+          -name: MYSQL_HOST                  #mysql host environment varaiable
+           value: "mysql"                    #has of now we are given mysql but after creating pod for mysql we need to provide the IP here
+          -name: MYSQL_USER                 #user
+           value: "root"
+          -name: MYSQL_PASSWORD
+           value: "admin
+          -name: MYSQL_DB
+           value: "mydb"                  #up to this environment variable is set
+        ports:                            #application which run in which port
+          -containerPorts: 5000           #In code we have given pls check app.py --> app.run(host="0.0.0.0", port=5000, debug=True)
+        imagePullPolicy: Always
+
+    
