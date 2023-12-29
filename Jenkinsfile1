@@ -1,0 +1,53 @@
+pipeline {
+    
+    agent any 
+    
+     stages{
+        stage("Code clone"){
+            steps{
+                echo "code clone completed"
+                git url:"https://github.com/DineshA055/two-tire-flask-app.git", branch:"main"
+            }
+        } 
+        stage("Code analysis"){
+                   environment {
+                  SONAR_URL = "http://http://http://18.207.174.252:9000"
+                  }
+                  steps {
+                  withCredentials([string(credentialsId: 'sonar', variable: 'SONAR_AUTH_TOKEN')]) {
+                  sh 'cd  /var/lib/jenkins/workspace/project -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                  }
+               }
+           }
+        stage("image build"){
+            steps{
+                echo "image build completed"
+                sh "docker build -t project ."
+            }
+        }
+        stage("image push to dockerhub"){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerp', usernameVariable: 'dockeru')]) {
+                sh 'docker login -u ${dockeru} -p ${dockerp}'
+                sh 'docker tag project dinesh444/project:latest'
+                sh 'docker push dinesh444/project:latest'
+                
+                echo "image pushed to dockerhub"
+                }
+            }
+        }
+        stage("deploy image to container"){
+            steps{
+                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerp', usernameVariable: 'dockeru')]) {
+                sh 'docker login -u ${dockeru} -p ${dockerp}'
+                sh 'docker run -d -p 5000:5000 -t project:latest'
+                echo "deployed image to container"
+                }
+           }
+                
+            
+        }    
+         
+    }
+    
+}
